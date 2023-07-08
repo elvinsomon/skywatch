@@ -1,0 +1,47 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F6F23383-FBD6-4395-AEF6-A4A7CE9DD7F5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{B25E81FD-C686-40BA-B25A-C3DA35FD58A3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MetricsCollector", "MetricsCollector", "{93ADEDBB-D1B2-4582-BDA2-895338FAB84A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkyWatch.MetricsCollector.API", "SkyWatch.MetricsCollector.API\SkyWatch.MetricsCollector.API.csproj", "{A767B9D0-1B88-49AA-A48E-19C274CB7216}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkyWatch.MetricsCollector.Broker", "SkyWatch.MetricsCollector.Broker\SkyWatch.MetricsCollector.Broker.csproj", "{613ED184-8C23-428D-A11C-6DC8613681EB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkyWatch.MetricsCollector.Core", "SkyWatch.MetricsCollector.Core\SkyWatch.MetricsCollector.Core.csproj", "{D3C2452D-4E7D-4EF9-8F0F-828E20E50B3F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkyWatch.MetricsCollector.Infrastructure", "SkyWatch.MetricsCollector.Infrastructure\SkyWatch.MetricsCollector.Infrastructure.csproj", "{E08E6794-E968-433D-AA52-323F79AD394C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{93ADEDBB-D1B2-4582-BDA2-895338FAB84A} = {F6F23383-FBD6-4395-AEF6-A4A7CE9DD7F5}
+		{A767B9D0-1B88-49AA-A48E-19C274CB7216} = {93ADEDBB-D1B2-4582-BDA2-895338FAB84A}
+		{613ED184-8C23-428D-A11C-6DC8613681EB} = {93ADEDBB-D1B2-4582-BDA2-895338FAB84A}
+		{D3C2452D-4E7D-4EF9-8F0F-828E20E50B3F} = {93ADEDBB-D1B2-4582-BDA2-895338FAB84A}
+		{E08E6794-E968-433D-AA52-323F79AD394C} = {93ADEDBB-D1B2-4582-BDA2-895338FAB84A}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A767B9D0-1B88-49AA-A48E-19C274CB7216}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A767B9D0-1B88-49AA-A48E-19C274CB7216}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A767B9D0-1B88-49AA-A48E-19C274CB7216}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A767B9D0-1B88-49AA-A48E-19C274CB7216}.Release|Any CPU.Build.0 = Release|Any CPU
+		{613ED184-8C23-428D-A11C-6DC8613681EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{613ED184-8C23-428D-A11C-6DC8613681EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{613ED184-8C23-428D-A11C-6DC8613681EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{613ED184-8C23-428D-A11C-6DC8613681EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3C2452D-4E7D-4EF9-8F0F-828E20E50B3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3C2452D-4E7D-4EF9-8F0F-828E20E50B3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3C2452D-4E7D-4EF9-8F0F-828E20E50B3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3C2452D-4E7D-4EF9-8F0F-828E20E50B3F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E08E6794-E968-433D-AA52-323F79AD394C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E08E6794-E968-433D-AA52-323F79AD394C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E08E6794-E968-433D-AA52-323F79AD394C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E08E6794-E968-433D-AA52-323F79AD394C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
