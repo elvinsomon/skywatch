@@ -6,8 +6,4 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\SkyWatch.MetricsCollector.Core\SkyWatch.MetricsCollector.Core.csproj" />
-    </ItemGroup>
-
 </Project>
