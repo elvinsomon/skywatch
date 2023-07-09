@@ -1,3 +1,5 @@
+using Hangfire;
+using Hangfire.SqlServer;
 using Serilog;
 
 var configuration = new ConfigurationBuilder()
@@ -19,10 +21,32 @@ Log.Information("Sky Watch. Metrics Collector Broker. Starting up");
 
 try
 {
-
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
+
+    builder.Services.AddHangfire(configuration => configuration
+        .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+        .UseSimpleAssemblyNameTypeSerializer()
+        .UseRecommendedSerializerSettings()
+        .UseSqlServerStorage(builder.Configuration.GetConnectionString("HangfireServerDataBase"),
+            new SqlServerStorageOptions
+            {
+                CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+                SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+                QueuePollInterval = TimeSpan.Zero,
+                UseRecommendedIsolationLevel = true,
+                DisableGlobalLocks = true
+            }));
+
+
+    builder.Services.AddHangfireServer(options =>
+    {
+        options.ServerName = $"SkyWatch.MetricsCollector.Broker:{Environment.MachineName}";
+        options.WorkerCount = Environment.ProcessorCount * 5;
+        options.HeartbeatInterval = TimeSpan.FromMinutes(5);
+        options.Queues = new[] { "default" };
+    });
 
     var app = builder.Build();
 
@@ -34,10 +58,14 @@ try
 
     app.UseHttpsRedirection();
 
-    app.UseAuthorization();
-
-    app.MapControllers();
-
+    app.UseRouting();
+    
+    app.MapHangfireDashboard("/hangfire", new DashboardOptions
+    {
+        DashboardTitle = "Sky Watch Metrics Collector Broker - HangFire Server",
+        AppPath = "/hangfire"
+    });
+    
     app.Run();
 }
 catch (Exception ex)
