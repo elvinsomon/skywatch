@@ -1,4 +1,5 @@
 using System.Net;
+using Hangfire;
 using MetricsShared.MetricsCollectorDTO;
 using Microsoft.AspNetCore.Mvc;
 using SkyWatch.MetricsCollector.Core;
@@ -13,11 +14,13 @@ public class MetricCollectorController : Controller
 {
     private readonly ILogger<MetricCollectorController> _logger;
     private readonly MetricCollectorService _metricCollectorService;
-
-    public MetricCollectorController(ILogger<MetricCollectorController> logger, MetricCollectorService metricCollectorService)
+    private readonly IBackgroundJobClient _backgroundJob;
+    
+    public MetricCollectorController(ILogger<MetricCollectorController> logger, MetricCollectorService metricCollectorService, IBackgroundJobClient backgroundJob)
     {
         _logger = logger;
         _metricCollectorService = metricCollectorService;
+        _backgroundJob = backgroundJob;
     }
 
 
@@ -30,7 +33,8 @@ public class MetricCollectorController : Controller
         {
             _logger.LogInformation("Create Metric Record. Start. Request {@request}", request);
             
-            await _metricCollectorService.CreateMetric(request);
+            // await _metricCollectorService.CreateMetric(request);
+            _backgroundJob.Enqueue(() => _metricCollectorService.CreateMetric(request));
             var response = GenerateSuccessfulResponse();
             
             _logger.LogInformation("Create Metric Record. End. Response {@response}", response);

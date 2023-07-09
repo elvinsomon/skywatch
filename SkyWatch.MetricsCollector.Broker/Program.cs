@@ -1,6 +1,9 @@
 using Hangfire;
 using Hangfire.SqlServer;
 using Serilog;
+using SkyWatch.MetricsCollector.Core;
+using SkyWatch.MetricsCollector.Core.Contracts;
+using SkyWatch.MetricsCollector.Infrastructure.DataBase.Mock;
 
 var configuration = new ConfigurationBuilder()
     .SetBasePath(Directory.GetCurrentDirectory())
@@ -21,6 +24,10 @@ Log.Information("Sky Watch. Metrics Collector Broker. Starting up");
 
 try
 {
+    // Bussiness services
+    builder.Services.AddTransient<IMetricRecordRepository, MetricRecordRepositoryMock>();
+    builder.Services.AddTransient<MetricCollectorService>();
+    
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();

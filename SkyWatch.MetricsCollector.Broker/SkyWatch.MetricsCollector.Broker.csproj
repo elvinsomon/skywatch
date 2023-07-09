@@ -22,4 +22,9 @@
         <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\SkyWatch.MetricsCollector.Core\SkyWatch.MetricsCollector.Core.csproj" />
+      <ProjectReference Include="..\SkyWatch.MetricsCollector.Infrastructure\SkyWatch.MetricsCollector.Infrastructure.csproj" />
+    </ItemGroup>
+
 </Project>

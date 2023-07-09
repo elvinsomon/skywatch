@@ -18,6 +18,8 @@ public class MetricCollectorService
 
     public async Task CreateMetric(MCRequest request)
     {
+        _logger.LogInformation("Metrics Collector Service. Create Metric. Start. Request: {@request}", request);
+        
         var recordToCreate = new MetricRecord
         {
             Hostname = request.Hostname,
@@ -26,6 +28,8 @@ public class MetricCollectorService
             MetricValue = request.MetricValue
         };
         
+        _logger.LogInformation("Metrics Collector Service. Record to create: {@recordToCreate}", recordToCreate);
         await _metricRecordRepository.CreateMetricRecordAsync(recordToCreate);
+        _logger.LogInformation("Metrics Collector Service. Metric created.");
     }
 }
