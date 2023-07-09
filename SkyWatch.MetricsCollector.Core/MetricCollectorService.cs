@@ -25,7 +25,8 @@ public class MetricCollectorService
             Hostname = request.Hostname,
             IpAddress = request.IpAddress,
             MetricName = request.MetricName,
-            MetricValue = request.MetricValue
+            MetricValue = request.MetricValue,
+            TimesTamp = request.TimesTamp
         };
         
         _logger.LogInformation("Metrics Collector Service. Record to create: {@recordToCreate}", recordToCreate);
