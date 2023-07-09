@@ -1,14 +1,18 @@
 ﻿using System.Diagnostics;
 using System.Management;
+using System.Net;
 using System.Net.Http.Json;
+using System.Net.NetworkInformation;
+using System.Net.Sockets;
 using MetricsShared.Common;
 using MetricsShared.MetricsCollectorDTO;
 
 Console.WriteLine("MetricSourceAgent. Starting...");
 
 Console.Write("Ingrese el nombre del host: ");
-var hostname = Console.ReadLine();
+var _hostname = Console.ReadLine();
 
+var _ipv4Address = GetIpAddress();
 var totalMemoryMegabytes = GetTotalMemoryMegabytes();
 
 var ramCounter = new PerformanceCounter("Memory", "Available MBytes");
@@ -28,6 +32,8 @@ while (true)
     
     Thread.Sleep(5000);
 }
+
+// Methods
 
 ulong GetTotalMemoryMegabytes()
 {
@@ -53,8 +59,8 @@ async Task InvokeMetricCollectorApi(MetricType metricType, float metricValue)
         using var httpClient = new HttpClient();
         var request = new MCRequest
         {
-            Hostname = hostname,
-            IpAddress = "",
+            Hostname = _hostname,
+            IpAddress = _ipv4Address?.ToString(),
             MetricName = metricName,
             MetricValue = metricValue.ToString(),
             TimesTamp = DateTime.Now.ToString()
@@ -70,4 +76,16 @@ async Task InvokeMetricCollectorApi(MetricType metricType, float metricValue)
         Console.WriteLine("Error invoking API");
         Console.WriteLine(ex.Message);
     }
+}
+
+IPAddress? GetIpAddress()
+{
+    var interfaces = NetworkInterface.GetAllNetworkInterfaces();
+    var ipAddress = interfaces.FirstOrDefault(
+        iface => iface.OperationalStatus == OperationalStatus.Up
+                 && iface.NetworkInterfaceType != NetworkInterfaceType.Loopback
+                 && iface.GetIPProperties().GatewayAddresses.Any()
+                 && iface.GetIPProperties().UnicastAddresses.Any(addr => addr.Address.AddressFamily == AddressFamily.InterNetwork)
+    )?.GetIPProperties().UnicastAddresses.FirstOrDefault(addr => addr.Address.AddressFamily == AddressFamily.InterNetwork)?.Address;
+    return ipAddress;
 }
