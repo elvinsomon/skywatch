@@ -6,5 +6,5 @@ public record MCRequest
     public string? IpAddress { get; set; }
     public string? MetricName { get; set; }
     public string? MetricValue { get; set; }
-    public string? TimesTamp { get; set; }
+    public DateTime TimesTamp { get; set; }
 }
