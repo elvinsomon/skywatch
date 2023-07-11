@@ -3,6 +3,7 @@ using Hangfire.SqlServer;
 using Serilog;
 using SkyWatch.MetricsCollector.Core;
 using SkyWatch.MetricsCollector.Core.Contracts;
+using SkyWatch.MetricsCollector.Infrastructure.DataBase.Influx;
 using SkyWatch.MetricsCollector.Infrastructure.DataBase.Mock;
 
 var configuration = new ConfigurationBuilder()
@@ -25,7 +26,8 @@ Log.Information("Sky Watch. Metrics Collector Broker. Starting up");
 try
 {
     // Bussiness services
-    builder.Services.AddTransient<IMetricRecordRepository, MetricRecordRepositoryMock>();
+    builder.Services.AddTransient<IMetricRecordRepository, MetricRecordRepository>();
+    // builder.Services.AddTransient<IMetricRecordRepository, MetricRecordRepositoryMock>();
     builder.Services.AddTransient<MetricCollectorService>();
     
     builder.Services.AddControllers();
@@ -45,7 +47,6 @@ try
                 UseRecommendedIsolationLevel = true,
                 DisableGlobalLocks = true
             }));
-
 
     builder.Services.AddHangfireServer(options =>
     {
