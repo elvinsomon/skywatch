@@ -1,24 +1,17 @@
 ﻿using System.Diagnostics;
 using System.Net;
-using System.Net.Http.Json;
 using MetricSourceAgent.Services;
 using MetricsShared.Common;
-using MetricsShared.MetricsCollectorDTO;
+using Microsoft.Extensions.Configuration;
 
 Console.WriteLine("MetricSourceAgent. Starting...");
 
-// Collect PC information
-Console.Write("Ingrese el nombre del host: ");
-var hostname = Console.ReadLine();
-
-var _ipv4Address = PCInformationService.GetIpAddress();
-var totalMemoryMegabytes = PCInformationService.GetTotalMemoryMegabytes();
-
+var collectorApiUrl = GetCollectorApiUrl();
+GetHostInfo(out var hostname,out var ipv4Address, out var totalMemoryMegabytes);
 var ramCounter = new PerformanceCounter("Memory", "Available MBytes");
 var cpuCounter = new PerformanceCounter("Process", "% Processor Time", "_Total");
 
-// Send metrics to MetricCollector API
-var metricsCollectorApiClient = new MetricsCollectorApiClient(hostname, _ipv4Address!, "");
+var metricsCollectorApiClient = new MetricsCollectorApiClient(hostname, ipv4Address!, collectorApiUrl!);
 
 while (true)
 {
@@ -32,5 +25,23 @@ while (true)
     Task.Run(async () => { await metricsCollectorApiClient.InvokeAsync(MetricType.ram_consumed, consumedRam); });
     Task.Run(async () => { await metricsCollectorApiClient.InvokeAsync(MetricType.cpu_usage, cpu / 10); });
 
-    Thread.Sleep(5000);
+    Thread.Sleep(2000);
+}
+
+string? GetCollectorApiUrl()
+{
+    var configuration = new ConfigurationBuilder()
+        .SetBasePath(Directory.GetCurrentDirectory())
+        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+        .Build();
+
+    var s = configuration.GetSection("MetricsCollectorApiUrl").Value;
+    return s;
+}
+
+void GetHostInfo(out string hostName, out IPAddress? ipAddress, out ulong totalMemoryMegabytes1)
+{
+    hostName = Environment.MachineName;
+    ipAddress = PCInformationService.GetIpAddress();
+    totalMemoryMegabytes1 = PCInformationService.GetTotalMemoryMegabytes();
 }

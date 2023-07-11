@@ -33,8 +33,8 @@ public class MetricCollectorController : Controller
         {
             _logger.LogInformation("Create Metric Record. Start. Request {@request}", request);
             
-            // await _metricCollectorService.CreateMetric(request);
             _backgroundJob.Enqueue(() => _metricCollectorService.CreateMetric(request));
+            
             var response = GenerateSuccessfulResponse();
             
             _logger.LogInformation("Create Metric Record. End. Response {@response}", response);

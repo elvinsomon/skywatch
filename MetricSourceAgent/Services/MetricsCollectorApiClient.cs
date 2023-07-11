@@ -27,7 +27,7 @@ public class MetricsCollectorApiClient
             var response = await httpClient.PostAsJsonAsync(_apiUrl, request);
             var responseBody = await response.Content.ReadAsStringAsync();
 
-            Console.WriteLine($"Response from Task {Task.CurrentId}: {responseBody}");
+            Console.WriteLine($"Metric Send Successfully. Response from Task {Task.CurrentId}: {responseBody}");
         }
         catch (Exception ex)
         {
