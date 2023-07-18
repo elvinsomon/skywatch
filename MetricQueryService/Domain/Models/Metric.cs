@@ -8,4 +8,5 @@ public class Metric
     public string? MetricName { get; set; }
     public string? MetricValue { get; set; }
     public DateTime TimesTamp { get; set; }
+    public string? TimesTampString { get; set; }
 }

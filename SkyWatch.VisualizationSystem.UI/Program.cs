@@ -1,5 +1,6 @@
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
+using MetricQueryService;
+using MetricQueryService.Domain.Contracts;
+using MetricQueryService.Infrastructure.InfluxBD;
 using SkyWatch.VisualizationSystem.UI.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+builder.Services.AddTransient<IMetricQuery, MetricQuery>();
+builder.Services.AddTransient<MetricsQueryService>();
 builder.Services.AddSingleton<WeatherForecastService>();
 
 var app = builder.Build();

@@ -1,4 +1,5 @@
 using MetricQueryService.Domain.Contracts;
+using MetricQueryService.Domain.Models;
 using MetricsShared.Common;
 
 namespace MetricQueryService;
@@ -12,8 +13,6 @@ public class MetricsQueryService
         _metricQuery = metricQuery;
     }
     
-    public async Task GetMetricsAsync(MetricType metricType)
-    {
-        await _metricQuery.GetMetricsAsync(metricType);
-    }
+    public async Task<IEnumerable<Metric>> GetMetricsAsync(MetricType metricType)
+        => await _metricQuery.GetMetricsAsync(metricType);
 }

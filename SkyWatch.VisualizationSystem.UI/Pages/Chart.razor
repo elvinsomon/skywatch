@@ -1,0 +1,66 @@
+@using MetricsShared.Common
+@inject IJSRuntime JS
+@inject MetricQueryService.MetricsQueryService _metricQueryService
+
+
+@if (HasError)
+{
+    <p>@ErrorMessage</p>
+}
+else
+{
+<h4>Uso de CPU (%)</h4>
+    <div class="chartLine">
+        <canvas id="cpuUsageChart"></canvas>
+    </div>
+    
+    
+    <h4>Uso de RAM (Mb)</h4>
+    <div class="chartLine">
+        <canvas id="ramUsageChart"></canvas>
+    </div>
+}
+
+@code {
+
+    private string ErrorMessage;
+    private bool HasError = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        try
+        {
+            ShowCPUMetrics();
+            ShowRAMMetrics();
+        }
+        catch (Exception ex)
+        {
+            HasError = true;
+            ErrorMessage = $"Ha ocurrido un error: {ex.Message}";
+            StateHasChanged();
+        }
+    }
+
+    private async Task ShowCPUMetrics()
+    {
+        var metricName = Enum.GetName(typeof(MetricType), MetricType.cpu_usage);
+        var metricsResult = (await _metricQueryService.GetMetricsAsync(MetricType.cpu_usage)).ToList();
+
+        var labelsArray = metricsResult.Select(x => x.TimesTampString).ToArray();
+
+        var dataArray = metricsResult.Select(x => x.MetricValue).ToArray();
+        await JS.InvokeVoidAsync("showCPUGraphic", labelsArray, dataArray, metricName);
+    }
+
+    private async Task ShowRAMMetrics()
+    {
+        var metricName = Enum.GetName(typeof(MetricType), MetricType.ram_consumed);
+        var metricsResult = (await _metricQueryService.GetMetricsAsync(MetricType.ram_consumed)).ToList();
+
+        var labelsArray = metricsResult.Select(x => x.TimesTampString).ToArray();
+
+        var dataArray = metricsResult.Select(x => x.MetricValue).ToArray();
+        await JS.InvokeVoidAsync("showRamGraphic", labelsArray, dataArray, metricName);
+    }
+
+}

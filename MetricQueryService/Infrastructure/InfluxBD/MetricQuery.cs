@@ -6,7 +6,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace MetricQueryService.Infrastructure.InfluxBD;
 
-public class MetricQuery: IMetricQuery
+public class MetricQuery : IMetricQuery
 {
     private readonly InfluxConfiguration _influxConfiguration;
 
@@ -16,33 +16,63 @@ public class MetricQuery: IMetricQuery
         configuration.Bind("InfluxConfig", _influxConfiguration);
     }
 
-    public async Task GetMetricsAsync(MetricType metricType)
+    public async Task<IEnumerable<Metric>> GetMetricsAsync(MetricType metricType)
     {
         var metricName = Enum.GetName(typeof(MetricType), metricType);
-                    
+
         var flux = $"from(bucket: \"{_influxConfiguration.Bucket}\") " +
-                   $"|> range(start: -1h) " +
+                   $"|> range(start: -5m) " +
                    $"|> filter(fn: (r) => r[\"_measurement\"] == \"Infra_Perform\") " +
                    $"|> filter(fn: (r) => r[\"_field\"] == \"{metricName}\") " +
-                   $"|> aggregateWindow(every: 1m, fn: mean, createEmpty: false) " +
+                   $"|> aggregateWindow(every: 20s, fn: mean, createEmpty: false) " +
                    $"|> yield(name: \"mean\")";
 
         using var client = new InfluxDBClient(_influxConfiguration.Host, _influxConfiguration.Token);
 
-        while (true)
-        {
-            var fluxTables = await client.GetQueryApi().QueryAsync(flux, _influxConfiguration.Organization);
+        // while (true)
+        // {
+        //     var fluxTables = await client.GetQueryApi().QueryAsync(flux, _influxConfiguration.Organization);
+        //
+        //     fluxTables.ForEach(fluxTable =>
+        //     {
+        //         fluxTable.Records.ForEach(fluxRecord =>
+        //         {
+        //             var value = fluxRecord.Values["_value"];
+        //             Console.WriteLine($"{fluxRecord.GetTime()}: {fluxRecord.GetValue()}");
+        //         });
+        //     });
+        //     
+        //     await Task.Delay(2000);
+        // }
+        //
 
-            fluxTables.ForEach(fluxTable =>
+        var metricsToReturn = new List<Metric>();
+        var fluxTables = await client.GetQueryApi().QueryAsync(flux, _influxConfiguration.Organization);
+
+        fluxTables.ForEach(fluxTable =>
+        {
+            fluxTable.Records.ForEach(fluxRecord =>
             {
-                fluxTable.Records.ForEach(fluxRecord =>
+                var value = fluxRecord.Values["_value"];
+                var time = fluxRecord.Values["_time"];
+                var ipAddress = fluxRecord.Values["ip_address"];
+                var host = fluxRecord.Values["host"];
+                
+                Console.WriteLine($"{fluxRecord.GetTime()}: {fluxRecord.GetValue()}");
+                
+                metricsToReturn.Add(new Metric
                 {
-                    Console.WriteLine($"{fluxRecord.GetTime()}: {fluxRecord.GetValue()}");
+                    //TimesTamp = Convert.ToDateTime(time),
+                    TimesTampString = time.ToString(),
+                    MetricValue = value.ToString(),
+                    MetricName = metricName,
+                    Hostname = host.ToString(),
+                    IpAddress = ipAddress.ToString()
                 });
             });
-            
-            await Task.Delay(2000);
-        }
+        });
+
+        return metricsToReturn;
     }
 }
 

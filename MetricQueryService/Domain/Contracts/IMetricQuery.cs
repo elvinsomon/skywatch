@@ -5,5 +5,5 @@ namespace MetricQueryService.Domain.Contracts;
 
 public interface IMetricQuery
 {
-    Task GetMetricsAsync(MetricType metricType);
+    Task<IEnumerable<Metric>> GetMetricsAsync(MetricType metricType);
 }

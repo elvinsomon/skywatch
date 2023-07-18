@@ -29,6 +29,58 @@
     <a class="dismiss">🗙</a>
 </div>
 
+<script>
+  window.showCPUGraphic = async (myLabels, myData, metricName) => {
+    const ctx = document.getElementById('cpuUsageChart');
+  
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: myLabels,
+        datasets: [{
+          label: metricName,
+          data: myData,
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: false
+          }
+        }
+      }
+    });
+  };
+  
+  window.showRamGraphic = async (myLabels, myData, metricName) => {
+    const ctx = document.getElementById('ramUsageChart');
+  
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: myLabels,
+        datasets: [{
+          label: metricName,
+          data: myData,
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: false
+          }
+        }
+      }
+    });
+  };
+  
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+@* <script src="js/chart.js"></script> *@
 <script src="_framework/blazor.server.js"></script>
 </body>
 </html>
