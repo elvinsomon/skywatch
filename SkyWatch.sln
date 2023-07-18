@@ -26,6 +26,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetricQueryService", "Metri
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetricQueryService.Client", "MetricQueryService.Client\MetricQueryService.Client.csproj", "{FAE066AC-93B3-49BA-BBBD-3031AB65A4FC}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VisualizationSystem", "VisualizationSystem", "{00141B1F-963E-4899-A4F0-4C98EA2CA724}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkyWatch.VisualizationSystem.UI", "SkyWatch.VisualizationSystem.UI\SkyWatch.VisualizationSystem.UI.csproj", "{E396B4F8-EC02-4A05-A887-0425FB222492}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +47,8 @@ Global
 		{BBE50E6B-98F7-4217-AD42-3751B59FB82D} = {F6F23383-FBD6-4395-AEF6-A4A7CE9DD7F5}
 		{FB6B0C72-FC7C-40F9-87C0-D22A96927BFB} = {BBE50E6B-98F7-4217-AD42-3751B59FB82D}
 		{FAE066AC-93B3-49BA-BBBD-3031AB65A4FC} = {BBE50E6B-98F7-4217-AD42-3751B59FB82D}
+		{00141B1F-963E-4899-A4F0-4C98EA2CA724} = {F6F23383-FBD6-4395-AEF6-A4A7CE9DD7F5}
+		{E396B4F8-EC02-4A05-A887-0425FB222492} = {00141B1F-963E-4899-A4F0-4C98EA2CA724}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{A767B9D0-1B88-49AA-A48E-19C274CB7216}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -77,5 +83,9 @@ Global
 		{FAE066AC-93B3-49BA-BBBD-3031AB65A4FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FAE066AC-93B3-49BA-BBBD-3031AB65A4FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FAE066AC-93B3-49BA-BBBD-3031AB65A4FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E396B4F8-EC02-4A05-A887-0425FB222492}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E396B4F8-EC02-4A05-A887-0425FB222492}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E396B4F8-EC02-4A05-A887-0425FB222492}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E396B4F8-EC02-4A05-A887-0425FB222492}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
