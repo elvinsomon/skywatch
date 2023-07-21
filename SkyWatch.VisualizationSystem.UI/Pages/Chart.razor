@@ -1,7 +1,7 @@
 @using MetricsShared.Common
+@using MetricQueryService.Domain.Models
 @inject IJSRuntime JS
 @inject MetricQueryService.MetricsQueryService _metricQueryService
-
 
 @if (HasError)
 {
@@ -9,15 +9,19 @@
 }
 else
 {
-<h4>Uso de CPU (%)</h4>
-    <div class="chartLine">
-        <canvas id="cpuUsageChart"></canvas>
+    <div class="">
+        <h4>Uso de CPU (%)</h4>
+        <div class="chartLine">
+            <canvas id="cpuUsageChart"></canvas>
+        </div>
     </div>
-    
-    
-    <h4>Uso de RAM (Mb)</h4>
-    <div class="chartLine">
-        <canvas id="ramUsageChart"></canvas>
+
+
+    <div class="my-4">
+        <h4>Uso de RAM (Mb)</h4>
+        <div class="chartLine">
+            <canvas id="ramUsageChart"></canvas>
+        </div>
     </div>
 }
 
@@ -30,8 +34,9 @@ else
     {
         try
         {
-            ShowCPUMetrics();
-            ShowRAMMetrics();
+            StateHasChanged();
+            ShowMetrics(MetricType.cpu_usage, "cpuUsageChart");
+            ShowMetrics(MetricType.ram_consumed, "ramUsageChart");
         }
         catch (Exception ex)
         {
@@ -41,26 +46,15 @@ else
         }
     }
 
-    private async Task ShowCPUMetrics()
+    private async Task ShowMetrics(MetricType metricType, string componentId)
     {
-        var metricName = Enum.GetName(typeof(MetricType), MetricType.cpu_usage);
-        var metricsResult = (await _metricQueryService.GetMetricsAsync(MetricType.cpu_usage)).ToList();
-
+        var metricName = Enum.GetName(typeof(MetricType), metricType);
+        var metricsResult = (await _metricQueryService.GetMetricsAsync(metricType)).ToList();
+        
         var labelsArray = metricsResult.Select(x => x.TimesTampString).ToArray();
 
         var dataArray = metricsResult.Select(x => x.MetricValue).ToArray();
-        await JS.InvokeVoidAsync("showCPUGraphic", labelsArray, dataArray, metricName);
-    }
-
-    private async Task ShowRAMMetrics()
-    {
-        var metricName = Enum.GetName(typeof(MetricType), MetricType.ram_consumed);
-        var metricsResult = (await _metricQueryService.GetMetricsAsync(MetricType.ram_consumed)).ToList();
-
-        var labelsArray = metricsResult.Select(x => x.TimesTampString).ToArray();
-
-        var dataArray = metricsResult.Select(x => x.MetricValue).ToArray();
-        await JS.InvokeVoidAsync("showRamGraphic", labelsArray, dataArray, metricName);
+        await JS.InvokeVoidAsync("showLineGraphic", labelsArray, dataArray, metricName, componentId);
     }
 
 }

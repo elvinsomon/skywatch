@@ -29,23 +29,6 @@ public class MetricQuery : IMetricQuery
 
         using var client = new InfluxDBClient(_influxConfiguration.Host, _influxConfiguration.Token);
 
-        // while (true)
-        // {
-        //     var fluxTables = await client.GetQueryApi().QueryAsync(flux, _influxConfiguration.Organization);
-        //
-        //     fluxTables.ForEach(fluxTable =>
-        //     {
-        //         fluxTable.Records.ForEach(fluxRecord =>
-        //         {
-        //             var value = fluxRecord.Values["_value"];
-        //             Console.WriteLine($"{fluxRecord.GetTime()}: {fluxRecord.GetValue()}");
-        //         });
-        //     });
-        //     
-        //     await Task.Delay(2000);
-        // }
-        //
-
         var metricsToReturn = new List<Metric>();
         var fluxTables = await client.GetQueryApi().QueryAsync(flux, _influxConfiguration.Organization);
 
@@ -62,7 +45,6 @@ public class MetricQuery : IMetricQuery
                 
                 metricsToReturn.Add(new Metric
                 {
-                    //TimesTamp = Convert.ToDateTime(time),
                     TimesTampString = time.ToString(),
                     MetricValue = value.ToString(),
                     MetricName = metricName,

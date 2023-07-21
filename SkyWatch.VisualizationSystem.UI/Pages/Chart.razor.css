@@ -1,3 +1,7 @@
 .chartLine{
     height: 30rem;
 }
+
+.component-container{
+    margin: 1rem 0;
+}
