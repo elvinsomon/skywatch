@@ -13,6 +13,6 @@ public class MetricsQueryService
         _metricQuery = metricQuery;
     }
     
-    public async Task<IEnumerable<Metric>> GetMetricsAsync(MetricType metricType)
+    public async Task<List<Metric>> GetMetricsAsync(MetricType metricType)
         => await _metricQuery.GetMetricsAsync(metricType);
 }

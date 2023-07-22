@@ -16,7 +16,7 @@ public class MetricQuery : IMetricQuery
         configuration.Bind("InfluxConfig", _influxConfiguration);
     }
 
-    public async Task<IEnumerable<Metric>> GetMetricsAsync(MetricType metricType)
+    public async Task<List<Metric>> GetMetricsAsync(MetricType metricType)
     {
         var metricName = Enum.GetName(typeof(MetricType), metricType);
 
