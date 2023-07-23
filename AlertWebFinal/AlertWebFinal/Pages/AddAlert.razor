@@ -1,0 +1,56 @@
+﻿@page "/counter"
+@inject AlertWebFinal.Service.WeatherForecastService metricsDataService
+
+
+<div class="add-metric-container">
+    <h3>Agregar Alerta</h3>
+    <div>
+        <label for="txtCorreo">Correo:</label>
+        <input type="text" id="txtCorreo" @bind="correo" />
+    </div>
+    <div>
+        <label for="txtNombreCpu">Nombre de CPU:</label>
+        <input type="text" id="txtNombreCpu" @bind="nombreCpu" />
+    </div>
+    <div>
+        <label for="txtNombreCpu">Nombre del host:</label>
+        <input type="text" id="txtNombreCpu" @bind="hostname" />
+    </div>
+    <div>
+        <label for="txtMetrica">Métrica:</label>
+        <input type="text" id="txtMetrica" @bind="metrica" />
+    </div>
+    <div>
+        <button @onclick="AgregarMetrica">Agregar</button>
+    </div>
+</div>
+
+@code {
+
+    private string correo;
+    private string nombreCpu;
+    private string metrica;
+    private string hostname;
+
+
+    private void AgregarMetrica()
+    {
+        // Usar la instancia compartida de MetricsData desde MetricsDataService
+        var data = metricsDataService.MetricsDataInstance;
+
+        // Guardar los datos ingresados
+        data.cpuName = nombreCpu;
+        data.MetricValue = Convert.ToInt32(metrica); // Aquí asumimos que la métrica es un valor numérico
+        data.Hostname = hostname; // Aquí puedes establecer el valor del Hostname que desees
+        data.Date = DateTime.Now;
+
+        metricsDataService.AgregarConjunto(data);
+
+        // Luego, reiniciamos las cajas de texto
+        correo = string.Empty;
+        nombreCpu = string.Empty;
+        metrica = string.Empty;
+        hostname = string.Empty;
+
+    }
+}

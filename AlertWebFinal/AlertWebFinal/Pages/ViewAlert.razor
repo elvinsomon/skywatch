@@ -1,0 +1,42 @@
+﻿@page "/fetchdata"
+
+@using AlertWebFinal.Data
+@inject AlertWebFinal.Service.WeatherForecastService ForecastService
+
+<h1>Lista de Alertas </h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>cpu Name</th>
+            <th>Metric Value</th>
+            <th>Hostname</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var conjunto in ForecastService.MetricsDataList)
+        {
+            <tr>
+                <td>@conjunto.cpuName</td>
+                <td>@conjunto.MetricValue</td>
+                <td>@conjunto.Hostname</td>
+                <td>@conjunto.Date.ToString("yyyy-MM-dd HH:mm:ss")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+}
+
+@code {
+    // Lista para almacenar los conjuntos de datos recolectados
+    public static List<WeatherForecast> conjuntos = new List<WeatherForecast>();
+
+
+
+    // Método para agregar un conjunto de datos a la lista
+    public static void AgregarConjunto(WeatherForecast conjunto)
+    {
+        conjuntos.Add(conjunto);
+    }
+}
