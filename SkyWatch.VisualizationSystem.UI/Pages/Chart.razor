@@ -3,7 +3,7 @@
 @inject IJSRuntime JS
 @inject MetricQueryService.MetricsQueryService _metricQueryService
 
-<div class="row g-2 align-items-center my-4">
+<div class="row g-2 align-items-center mb-4">
     <div class="col">
         <!-- Page pre-title -->
         <div class="page-pretitle">
@@ -14,27 +14,27 @@
         </h1>
     </div>
     <!-- Page title actions -->
-    <div class="col-auto ms-auto d-print-none">
-        <div class="btn-list">
-            <a href="#" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal" data-bs-target="#modal-report">
-                <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14"/><path d="M5 12l14 0"/>
-                </svg>
-                Crear Nueva Alerta
-            </a>
-            <a href="#" class="btn btn-primary d-sm-none btn-icon" data-bs-toggle="modal" data-bs-target="#modal-report" aria-label="Create new report">
-                <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14"/><path d="M5 12l14 0"/>
-                </svg>
-            </a>
-        </div>
-    </div>
+    @* <div class="col-auto ms-auto d-print-none"> *@
+    @*     <div class="btn-list"> *@
+    @*         <a href="#" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal" data-bs-target="#modal-report"> *@
+    @*             <!-- Download SVG icon from http://tabler-icons.io/i/plus --> *@
+    @*             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> *@
+    @*                 <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14"/><path d="M5 12l14 0"/> *@
+    @*             </svg> *@
+    @*             Crear Nueva Alerta *@
+    @*         </a> *@
+    @*         <a href="#" class="btn btn-primary d-sm-none btn-icon" data-bs-toggle="modal" data-bs-target="#modal-report" aria-label="Create new report"> *@
+    @*             <!-- Download SVG icon from http://tabler-icons.io/i/plus --> *@
+    @*             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> *@
+    @*                 <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14"/><path d="M5 12l14 0"/> *@
+    @*             </svg> *@
+    @*         </a> *@
+    @*     </div> *@
+    @* </div> *@
 </div>
 <div class="row g-3 align-items-center">
     <div class="col-auto">
-        <span class="status-indicator status-green status-indicator-animated">
+        <span class="status-indicator @style status-indicator-animated">
             <span class="status-indicator-circle"></span>
             <span class="status-indicator-circle"></span>
             <span class="status-indicator-circle"></span>
@@ -47,7 +47,7 @@
         <div class="text-muted">
             <ul class="list-inline list-inline-dots mb-0">
                 <li class="list-inline-item">
-                    <span class="text-green">Activo</span>
+                    <span class="text-green">@IsHostActive</span>
                 </li>
                 <li class="list-inline-item">@IpAddress</li>
             </ul>
@@ -115,29 +115,6 @@
     </div>
 </div>
 
-
-@* @if (HasError) *@
-@* { *@
-@*     <p>@ErrorMessage</p> *@
-@* } *@
-@* else *@
-@* { *@
-@*     <div class=""> *@
-@*         <h4>Uso de CPU (%)</h4> *@
-@*         <div class="chartLine"> *@
-@*             <canvas id="cpuUsageChart"></canvas> *@
-@*         </div> *@
-@*     </div> *@
-@* *@
-@* *@
-@*     <div class="my-4"> *@
-@*         <h4>Uso de RAM (Mb)</h4> *@
-@*         <div class="chartLine"> *@
-@*             <canvas id="ramUsageChart"></canvas> *@
-@*         </div> *@
-@*     </div> *@
-@* } *@
-
 @code {
     private string ErrorMessage;
     private bool HasError = false;
@@ -148,6 +125,8 @@
     private string CpuUsagePercent = "";
     private int indexRam = 0;
     private int indexCpu = 0;
+    private string style;
+    private string IsHostActive;
 
     protected override async Task OnInitializedAsync()
     {
@@ -179,6 +158,17 @@
         
         IpAddress = metricsResult.Select(x => x.IpAddress).FirstOrDefault() ??
                         "Unknown_ip";
+
+        if (HostName is "Unknown_host" || IpAddress is "Unknown_ip")
+        {
+            style = "status-red";
+            IsHostActive = "Inactivo";
+        }
+        else
+        {
+            style = "status-green";
+            IsHostActive = "Activo";
+        }
         
         var labelsArray = metricsResult.Select(x => x.TimesTampString).ToArray();
 

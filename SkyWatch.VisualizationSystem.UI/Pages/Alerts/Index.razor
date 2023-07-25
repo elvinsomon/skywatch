@@ -1,6 +1,60 @@
 @page "/Alerts/Index"
-<h3>Alertas</h3>
+@using SkyWatch.VisualizationSystem.UI.Data
+@inject AlertService _employeeService
+
+
+<div class="row g-2 align-items-center mb-4">
+    <div class="col">
+        <h1>Alertas</h1>
+    </div>
+    <!-- Page title actions -->
+    <div class="col-auto ms-auto d-print-none">
+        <div class="btn-list">
+            <a href="/alerts/create" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal" data-bs-target="#modal-report">
+                Crear Nueva Alerta
+            </a>
+        </div>
+    </div>
+</div>
+
+
+<div class="table-responsive">
+    <table class="table table-vcenter">
+        <thead>
+        <tr>
+            <th>No.</th>
+            <th>Nombre</th>
+            <th>Métrica</th>
+            <th>Umbral</th>
+            <th>Correo Destino</th>
+            <th class="w-1"></th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in AlertsCollection)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Name</td>
+                <td>@item.MetricType</td>
+                <td>@item.Threshold</td>
+                <td>@item.EmailAddress</td>
+                <td>
+                    <a href="/">Edit</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+
 
 @code {
-    
+    public List<Alert> AlertsCollection { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        AlertsCollection = await _employeeService.GetAllAlertsAsync();
+    }
+
 }

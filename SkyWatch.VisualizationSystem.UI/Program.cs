@@ -1,6 +1,7 @@
 using MetricQueryService;
 using MetricQueryService.Domain.Contracts;
 using MetricQueryService.Infrastructure.InfluxBD;
+using Microsoft.EntityFrameworkCore;
 using SkyWatch.VisualizationSystem.UI.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,7 +11,9 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddTransient<IMetricQuery, MetricQuery>();
 builder.Services.AddTransient<MetricsQueryService>();
-builder.Services.AddSingleton<WeatherForecastService>();
+builder.Services.AddScoped<AlertService>();
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 
 var app = builder.Build();
 
